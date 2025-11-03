@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>保费测算与成分分析工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            display: flex;
+            gap: 2rem;
+        }
+        header {
+            background-color: #165DFF;
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-weight: 600;
+            font-size: 1.8rem;
+        }
+        .calculator-panel {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .result-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #444;
+        }
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #165DFF;
+        }
+        button {
+            background-color: #165DFF;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #0E42D2;
+        }
+        .chart-container {
+            width: 350px;
+            height: 350px;
+            position: relative;
+            margin-bottom: 2rem;
+        }
+        .result-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            width: 100%;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .result-item {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .result-label {
+            font-weight: 500;
+            color: #666;
+        }
+        .result-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #165DFF;
+        }
+        .legend {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .legend-color {
+            width: 15px;
+            height: 15px;
+            border-radius: 3px;
+        }
+        .risk-color {
+            background-color: #FF4D4F;
+        }
+        .operation-color {
+            background-color: #00B42A;
+        }
+        .profit-color {
+            background-color: #165DFF;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>保费测算与成分分析工具</h1>
+    </header>
+    <div class="container">
+        <div class="calculator-panel">
+            <div class="input-group">
+                <label for="expectedClaim">预期赔付额 (元)</label>
+                <input type="number" id="expectedClaim" value="10000" min="0" step="100">
+            </div>
+            <div class="input-group">
+                <label for="claimRatio">预期赔付率 (%)</label>
+                <input type="number" id="claimRatio" value="65" min="0" max="100" step="1">
+            </div>
+            <div class="input-group">
+                <label for="expenseRatio">附加费用率 (%)</label>
+                <input type="number" id="expenseRatio" value="20" min="0" max="100" step="1">
+            </div>
+            <button onclick="calculate()">计算保费成分</button>
+        </div>
+        <div class="result-panel">
+            <div class="chart-container">
+                <canvas id="premiumChart"></canvas>
+            </div>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color risk-color"></div>
+                    <span>风险成本</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color operation-color"></div>
+                    <span>运营成本</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color profit-color"></div>
+                    <span>利润</span>
+                </div>
+            </div>
+            <div class="result-card">
+                <div class="result-item">
+                    <div class="result-label">纯保费 (风险成本)</div>
+                    <div class="result-value" id="purePremium">0 元</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">年缴毛保费</div>
+                    <div class="result-value" id="annualPremium">0 元</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">运营成本</div>
+                    <div class="result-value" id="operationCost">0 元</div>
+                </div>
+                <div class="result-item">
+                    <div class="result-label">利润</div>
+                    <div class="result-value" id="profit">0 元</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let premiumChart;
+
+        // 初始化图表
+        function initChart() {
+            const ctx = document.getElementById('premiumChart').getContext('2d');
+            premiumChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['风险成本', '运营成本', '利润'],
+                    datasets: [{
+                        data: [0, 0, 0],
+                        backgroundColor: [
+                            '#FF4D4F',  // 红色 - 风险成本
+                            '#00B42A',  // 青绿色 - 运营成本
+                            '#165DFF'   // 蓝色 - 利润
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    cutout: '70%',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw || 0;
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                    return `${label}: ${value.toFixed(2)} 元 (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // 计算保费成分
+        function calculate() {
+            // 获取输入值
+            const expectedClaim = parseFloat(document.getElementById('expectedClaim').value);
+            const claimRatio = parseFloat(document.getElementById('claimRatio').value) / 100;  // 转换为小数
+            const expenseRatio = parseFloat(document.getElementById('expenseRatio').value) / 100;  // 转换为小数
+
+            // 第一步：计算纯保费（风险成本）
+            const purePremium = expectedClaim * claimRatio;
+
+            // 第二步：计算年缴毛保费
+            const annualPremium = purePremium / (1 - expenseRatio);
+
+            // 第三步：分解总保费
+            const operationCost = annualPremium * expenseRatio * 0.75;  // 运营成本占附加费用的75%
+            const profit = annualPremium * expenseRatio * 0.25;  // 利润占附加费用的25%
+
+            // 更新图表
+            premiumChart.data.datasets[0].data = [purePremium, operationCost, profit];
+            premiumChart.update();
+
+            // 更新结果显示
+            document.getElementById('purePremium').textContent = purePremium.toFixed(2) + ' 元';
+            document.getElementById('annualPremium').textContent = annualPremium.toFixed(2) + ' 元';
+            document.getElementById('operationCost').textContent = operationCost.toFixed(2) + ' 元';
+            document.getElementById('profit').textContent = profit.toFixed(2) + ' 元';
+        }
+
+        // 页面加载完成后初始化图表并计算一次
+        window.onload = function() {
+            initChart();
+            calculate();
+        };
+    </script>
+</body>
+</html>
