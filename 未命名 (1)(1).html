@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>染韵定制 - 完整首页版</title>
+    <!-- 引入外部资源 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* 基础样式 */
+        .page { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .try-on-preview { background: #f5f5f5; border-radius: 8px; overflow: hidden; position: relative; }
+        .design-canvas { border: 1px dashed #ddd; border-radius: 8px; min-height: 300px; display: flex; align-items: center; justify-content: center; transition: background-color 0.3s ease; }
+        .tab-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); z-index: 999; }
+        .map-placeholder { background: #f5f5f5; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #666; }
+        
+        /* 背景色选择器样式 */
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            border: 2px solid transparent;
+        }
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+        .color-option.active {
+            box-shadow: 0 0 0 2px white, 0 0 0 4px #d97706;
+            border-color: #d97706;
+        }
+
+        /* 首页样式增强 */
+        .home-banner {
+            position: relative;
+            height: 50vw;
+            max-height: 300px;
+            overflow: hidden;
+        }
+        .feature-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800 pb-20">
+    <!-- 1. 首页（完整保留并增强） -->
+    <div id="home-page" class="page active">
+        <!-- 顶部Banner -->
+        <div class="home-banner">
+            <img src="https://picsum.photos/id/1011/800/400" alt="AI试衣+蜡染定制" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/30 flex flex-col justify-center items-center text-white p-4 text-center">
+                <h2 class="text-2xl md:text-3xl font-bold mb-2">AI试衣·蜡染定制</h2>
+                <p class="text-base md:text-lg mb-4 max-w-md">探索传统蜡染工艺与现代设计的融合，打造专属你的文化单品</p>
+                <button onclick="switchPage('custom-page')" class="bg-amber-600 text-white px-6 py-2.5 rounded-lg hover:bg-amber-700 transition shadow-lg">
+                    立即定制
+                </button>
+            </div>
+        </div>
+
+        <!-- 三大核心入口 -->
+        <div class="grid grid-cols-3 gap-4 p-4">
+            <div class="feature-card flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-sm">
+                <button onclick="switchPage('tryon-page')" class="text-amber-600">
+                    <i class="fa-solid fa-user-check text-3xl mb-3"></i>
+                    <span class="text-sm font-medium">AI虚拟试衣</span>
+                </button>
+            </div>
+            <div class="feature-card flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-sm">
+                <button onclick="switchPage('custom-page')" class="text-amber-600">
+                    <i class="fa-solid fa-palette text-3xl mb-3"></i>
+                    <span class="text-sm font-medium">蜡染定制</span>
+                </button>
+            </div>
+            <div class="feature-card flex flex-col items-center justify-center p-4 bg-white rounded-lg shadow-sm">
+                <button onclick="switchPage('store-page')" class="text-amber-600">
+                    <i class="fa-solid fa-map-location-dot text-3xl mb-3"></i>
+                    <span class="text-sm font-medium">体验店导航</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 特色介绍 -->
+        <div class="p-4 bg-white rounded-lg shadow-sm mx-4 mb-4">
+            <h3 class="text-lg font-bold mb-3 flex items-center">
+                <i class="fa-solid fa-lightbulb text-amber-500 mr-2"></i>为什么选择我们
+            </h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div class="flex flex-col items-center text-center p-2">
+                    <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mb-2">
+                        <i class="fa-solid fa-paintbrush text-amber-600"></i>
+                    </div>
+                    <p class="text-xs">非遗工艺</p>
+                </div>
+                <div class="flex flex-col items-center text-center p-2">
+                    <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mb-2">
+                        <i class="fa-solid fa-magic text-amber-600"></i>
+                    </div>
+                    <p class="text-xs">AI辅助设计</p>
+                </div>
+                <div class="flex flex-col items-center text-center p-2">
+                    <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mb-2">
+                        <i class="fa-solid fa-hand-sparkles text-amber-600"></i>
+                    </div>
+                    <p class="text-xs">手工体验</p>
+                </div>
+                <div class="flex flex-col items-center text-center p-2">
+                    <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center mb-2">
+                        <i class="fa-solid fa-truck-fast text-amber-600"></i>
+                    </div>
+                    <p class="text-xs">成品配送</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 热门定制案例 -->
+        <div class="p-4">
+            <h3 class="text-lg font-bold mb-3 flex items-center">
+                <i class="fa-solid fa-star text-amber-500 mr-2"></i>热门定制案例
+            </h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden feature-card">
+                    <img src="https://picsum.photos/id/1010/400/300" alt="蜡染T恤" class="w-full h-40 object-cover">
+                    <div class="p-3">
+                        <h4 class="font-medium">蜡染T恤</h4>
+                        <span class="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded mt-1 inline-block">AI试穿可用</span>
+                        <button onclick="switchPage('custom-page')" class="w-full mt-2 bg-gray-100 text-gray-800 px-3 py-1.5 rounded text-sm hover:bg-gray-200 transition">
+                            定制同款
+                        </button>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-sm overflow-hidden feature-card">
+                    <img src="https://picsum.photos/id/1012/400/300" alt="蜡染围巾" class="w-full h-40 object-cover">
+                    <div class="p-3">
+                        <h4 class="font-medium">蜡染围巾</h4>
+                        <span class="text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded mt-1 inline-block">AI试穿可用</span>
+                        <button onclick="switchPage('custom-page')" class="w-full mt-2 bg-gray-100 text-gray-800 px-3 py-1.5 rounded text-sm hover:bg-gray-200 transition">
+                            定制同款
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 体验店速览 -->
+        <div class="p-4 bg-white rounded-lg shadow-sm mx-4 mb-4">
+            <h3 class="text-lg font-bold mb-3 flex items-center">
+                <i class="fa-solid fa-store text-amber-600 mr-2"></i>附近体验店
+            </h3>
+            <div class="flex items-center justify-between flex-wrap gap-3">
+                <div>
+                    <p class="font-medium">染韵定制（朝阳店）</p>
+                    <p class="text-sm text-gray-500">距离 1.2km · 剩余预约名额：3</p>
+                    <p class="text-xs text-gray-400 mt-1">营业时间：10:00-20:00</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="switchPage('store-page')" class="bg-amber-600 text-white px-3 py-1.5 rounded text-sm hover:bg-amber-700 transition">
+                        一键导航
+                    </button>
+                    <button onclick="switchPage('reserve-page')" class="bg-white border border-amber-600 text-amber-600 px-3 py-1.5 rounded text-sm hover:bg-amber-50 transition">
+                        立即预约
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. AI虚拟试衣页 -->
+    <div id="tryon-page" class="page">
+        <div class="p-4 bg-white shadow-sm sticky top-0 z-10">
+            <div class="flex items-center justify-between">
+                <button onclick="switchPage('home-page')" class="text-gray-600">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold">AI虚拟试衣</h2>
+                <span class="w-6"></span>
+            </div>
+        </div>
+
+        <div class="p-4">
+            <div class="try-on-preview p-4 mb-4 min-h-[400px] flex items-center justify-center">
+                <div class="text-center">
+                    <i class="fa-solid fa-user text-5xl text-gray-300 mb-3"></i>
+                    <p class="text-gray-500">请从首页进入定制后使用此功能</p>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button class="flex-1 bg-white border border-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-save mr-2"></i>保存试衣图
+                </button>
+                <button onclick="switchPage('custom-page')" class="flex-1 bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition">
+                    <i class="fa-solid fa-palette mr-2"></i>去定制设计
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. 蜡染定制页（核心修改区域） -->
+    <div id="custom-page" class="page">
+        <div class="p-4 bg-white shadow-sm sticky top-0 z-10">
+            <div class="flex items-center justify-between">
+                <button onclick="switchPage('home-page')" class="text-gray-600">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold">蜡染定制</h2>
+                <button onclick="switchPage('my-design-page')" class="text-amber-600">
+                    <i class="fa-solid fa-history"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="p-4">
+            <!-- 预览区（仅背景色区域） -->
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-4">
+                <h3 class="text-base font-bold mb-3">设计预览</h3>
+                <div id="design-canvas" class="design-canvas mb-3" style="background-color: #ffffff;">
+                    <p class="text-gray-400 text-sm">设计区域（点击下方颜色切换背景）</p>
+                </div>
+                <div class="flex justify-end">
+                    <button onclick="switchPage('tryon-page')" class="bg-amber-600 text-white px-3 py-1.5 rounded text-sm hover:bg-amber-700 transition try-on-btn">
+                        <i class="fa-solid fa-user-check mr-1"></i>AI试穿
+                    </button>
+                </div>
+            </div>
+
+            <!-- 基础选型（背景色选择） -->
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-4">
+                <h3 class="text-base font-bold mb-3">基础选型</h3>
+                
+                <!-- 背景色选择器 -->
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">选择背景色</label>
+                    <div class="flex gap-3">
+                        <div class="color-option active" data-color="#ffffff" style="background-color: #ffffff;" onclick="changeBackgroundColor(this)"></div>
+                        <div class="color-option" data-color="#f3f4f6" style="background-color: #f3f4f6;" onclick="changeBackgroundColor(this)"></div>
+                        <div class="color-option" data-color="#fef3c7" style="background-color: #fef3c7;" onclick="changeBackgroundColor(this)"></div>
+                        <div class="color-option" data-color="#dbeafe" style="background-color: #dbeafe;" onclick="changeBackgroundColor(this)"></div>
+                        <div class="color-option" data-color="#dcfce7" style="background-color: #dcfce7;" onclick="changeBackgroundColor(this)"></div>
+                        <div class="color-option" data-color="#fee2e2" style="background-color: #fee2e2;" onclick="changeBackgroundColor(this)"></div>
+                    </div>
+                </div>
+
+                <!-- 面料/尺寸 -->
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">面料材质</label>
+                        <select class="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-amber-600">
+                            <option value="cotton">棉麻</option>
+                            <option value="silk">丝绸</option>
+                            <option value="canvas">帆布</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">尺寸规格</label>
+                        <select class="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-amber-600">
+                            <option value="S">T恤 S码</option>
+                            <option value="M">T恤 M码</option>
+                            <option value="L">T恤 L码</option>
+                            <option value="XL">T恤 XL码</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- 定制类型 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">定制类型</label>
+                    <div class="flex gap-3">
+                        <label class="flex items-center p-2 border border-gray-300 rounded text-sm cursor-pointer hover:bg-gray-50 transition">
+                            <input type="radio" name="custom-type" checked class="mr-2 text-amber-600">
+                            <span>线下体验自做</span>
+                        </label>
+                        <label class="flex items-center p-2 border border-gray-300 rounded text-sm cursor-pointer hover:bg-gray-50 transition">
+                            <input type="radio" name="custom-type" class="mr-2 text-amber-600">
+                            <span>成品邮寄到家</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="flex gap-3">
+                <button class="flex-1 bg-white border border-gray-300 text-gray-800 px-4 py-2 rounded-lg hover:bg-gray-50 transition">
+                    <i class="fa-solid fa-save mr-2"></i>保存设计
+                </button>
+                <button onclick="switchPage('reserve-page')" class="flex-1 bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition">
+                    <i class="fa-solid fa-calendar-check mr-2"></i>预约体验/下单
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. 体验店导航页 -->
+    <div id="store-page" class="page">
+        <div class="p-4 bg-white shadow-sm sticky top-0 z-10">
+            <div class="flex items-center justify-between">
+                <button onclick="switchPage('home-page')" class="text-gray-600">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold">体验店导航</h2>
+                <span class="w-6"></span>
+            </div>
+        </div>
+
+        <div class="p-4">
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-4">
+                <h3 class="text-base font-bold mb-3">附近门店</h3>
+                <div class="space-y-3">
+                    <div class="p-3 border border-gray-100 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <p class="font-medium">染韵定制（朝阳店）</p>
+                        <p class="text-xs text-gray-500">距离 1.2km · 评分 4.9</p>
+                        <p class="text-xs text-amber-600 mt-1">剩余预约名额：3</p>
+                    </div>
+                    <div class="p-3 border border-gray-100 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <p class="font-medium">染韵定制（海淀店）</p>
+                        <p class="text-xs text-gray-500">距离 3.5km · 评分 4.8</p>
+                        <p class="text-xs text-amber-600 mt-1">剩余预约名额：5</p>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="switchPage('reserve-page')" class="w-full bg-amber-600 text-white px-4 py-3 rounded-lg hover:bg-amber-700 transition text-base font-medium">
+                预约体验
+            </button>
+        </div>
+    </div>
+
+    <!-- 5. 预约页 -->
+    <div id="reserve-page" class="page">
+        <div class="p-4 bg-white shadow-sm sticky top-0 z-10">
+            <div class="flex items-center justify-between">
+                <button onclick="switchPage('home-page')" class="text-gray-600">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold">预约体验</h2>
+                <span class="w-6"></span>
+            </div>
+        </div>
+
+        <div class="p-4">
+            <div class="bg-white rounded-lg shadow-sm p-4 mb-4">
+                <h3 class="text-base font-bold mb-3">预约信息</h3>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">选择体验店</label>
+                    <select class="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-amber-600">
+                        <option value="chaoyang">染韵定制（朝阳店）- 距离1.2km</option>
+                        <option value="haidian">染韵定制（海淀店）- 距离3.5km</option>
+                    </select>
+                </div>
+                <div class="grid grid-cols-2 gap-3 mb-3">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">预约日期</label>
+                        <input type="date" class="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-amber-600">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">预约时段</label>
+                        <select class="w-full p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-amber-600">
+                            <option value="10-12">10:00-12:00（剩余名额：2）</option>
+                            <option value="14-16">14:00-16:00（剩余名额：3）</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <button class="w-full bg-amber-600 text-white px-4 py-3 rounded-lg hover:bg-amber-700 transition text-base font-medium">
+                确认预约
+            </button>
+        </div>
+    </div>
+
+    <!-- 6. 我的设计页 -->
+    <div id="my-design-page" class="page">
+        <div class="p-4 bg-white shadow-sm sticky top-0 z-10">
+            <div class="flex items-center justify-between">
+                <button onclick="switchPage('custom-page')" class="text-gray-600">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold">我的设计</h2>
+                <span class="w-6"></span>
+            </div>
+        </div>
+
+        <div class="p-4 text-center py-10">
+            <i class="fa-solid fa-folder-open text-4xl text-gray-300 mb-3"></i>
+            <p class="text-gray-500">暂无保存的设计</p>
+            <button onclick="switchPage('custom-page')" class="mt-4 bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition">
+                开始新设计
+            </button>
+        </div>
+    </div>
+
+    <!-- 7. 订单页 -->
+    <div id="order-page" class="page">
+        <div class="p-4 bg-white shadow-sm sticky top-0 z-10">
+            <div class="flex items-center justify-between">
+                <button onclick="switchPage('home-page')" class="text-gray-600">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <h2 class="text-xl font-bold">我的订单</h2>
+                <span class="w-6"></span>
+            </div>
+        </div>
+
+        <div class="p-4 text-center py-10">
+            <i class="fa-solid fa-box text-4xl text-gray-300 mb-3"></i>
+            <p class="text-gray-500">暂无订单记录</p>
+            <button onclick="switchPage('custom-page')" class="mt-4 bg-amber-600 text-white px-4 py-2 rounded-lg hover:bg-amber-700 transition">
+                去定制下单
+            </button>
+        </div>
+    </div>
+
+    <!-- 底部导航栏 -->
+    <div class="tab-bar flex justify-around items-center py-3">
+        <button onclick="switchPage('home-page')" class="flex flex-col items-center text-amber-600">
+            <i class="fa-solid fa-home text-lg"></i>
+            <span class="text-xs mt-1">首页</span>
+        </button>
+        <button onclick="switchPage('custom-page')" class="flex flex-col items-center text-gray-500">
+            <i class="fa-solid fa-palette text-lg"></i>
+            <span class="text-xs mt-1">定制</span>
+        </button>
+        <button onclick="switchPage('store-page')" class="flex flex-col items-center text-gray-500">
+            <i class="fa-solid fa-map-marker-alt text-lg"></i>
+            <span class="text-xs mt-1">门店</span>
+        </button>
+        <button onclick="switchPage('order-page')" class="flex flex-col items-center text-gray-500">
+            <i class="fa-solid fa-user text-lg"></i>
+            <span class="text-xs mt-1">我的</span>
+        </button>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // 页面切换函数
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // 背景色切换函数
+        function changeBackgroundColor(element) {
+            const selectedColor = element.getAttribute('data-color');
+            const designCanvas = document.getElementById('design-canvas');
+            designCanvas.style.backgroundColor = selectedColor;
+            
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            element.classList.add('active');
+        }
+    </script>
+</body>
+</html>
